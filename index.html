@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surprise Birthday Invitation — For the Couple</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1:#0f1020;   /* night indigo */
+      --bg2:#1b2a49;   /* deep blue */
+      --accent:#ff6aa2;/* pink */
+      --accent-2:#ffd166;/* gold */
+      --paper:#fff7fb; /* soft paper */
+      --ink:#3a3a3a;   /* dark ink */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(1200px 800px at 10% 10%, #21325e 0%, transparent 55%),
+                     radial-gradient(900px 600px at 90% 90%, #1f2a44 0%, transparent 55%),
+                     linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:#fff; font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display:grid; place-items:center; padding:24px;
+      overflow:hidden;
+    }
+
+    /* floating hearts */
+    .hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden;}
+    .hearts span{
+      position:absolute; width:18px; height:18px; background:var(--accent);
+      transform:rotate(45deg);
+      animation: floatUp linear var(--t) infinite;
+      opacity:.35; filter: blur(0.2px);
+    }
+    .hearts span::before, .hearts span::after{
+      content:""; position:absolute; width:18px; height:18px; background:inherit; border-radius:50%;
+    }
+    .hearts span::before{ left:-9px; }
+    .hearts span::after{ top:-9px; }
+    @keyframes floatUp{ 0%{ transform:translateY(120vh) rotate(45deg); } 100%{ transform:translateY(-20vh) rotate(45deg);} }
+
+    .wrap{ width:min(980px, 92vw); text-align:center; position:relative; }
+    h1.title{ font-weight:800; letter-spacing:0.5px; margin:0 0 8px; opacity:.9 }
+    .subtitle{ opacity:.8; margin:0 0 20px; font-weight:400 }
+
+    /* Envelope reveal */
+    .stage{display:grid; place-items:center; margin:12px auto 28px; perspective:1200px;}
+    input#open{ position:absolute; opacity:0; }
+    label.envelope{
+      --w: 420px; --h: 260px; --p: 18px;
+      width:min(var(--w), 94vw); height:min(var(--h), 70vh);
+      display:block; cursor:pointer; position:relative; user-select:none;
+      filter: drop-shadow(0 30px 60px rgba(0,0,0,.35));
+      transition: transform .5s ease;
+    }
+    label.envelope:active{ transform:scale(.995); }
+
+    /* back */
+    .env-back{ position:absolute; inset:0; background:linear-gradient(145deg,#f7c2d4,#ffe3ec); border-radius:16px; }
+
+    /* letter */
+    .letter{ position:absolute; inset:var(--p); background:var(--paper); border-radius:12px; padding:22px; color:var(--ink);
+             transform: translateY(34%); transition: transform .9s cubic-bezier(.22,1,.26,1); display:grid; grid-template-rows:auto 1fr auto;}
+
+    /* flap */
+    .flap{ position:absolute; inset:0; transform-origin:top; transform: rotateX(0deg); transition: transform .9s cubic-bezier(.22,1,.26,1); }
+    .flap::before{
+      content:""; position:absolute; inset:0; background:conic-gradient(from -90deg at 50% 0%, #ffc3da, #ffd8ea, #ffc3da);
+      clip-path:polygon(0 0, 100% 0, 50% 55%);
+      border-top-left-radius:16px; border-top-right-radius:16px;
+    }
+    .seal{ position:absolute; left:50%; top:38%; transform:translate(-50%,-50%); width:64px; height:64px; background:radial-gradient(circle at 35% 35%, #ffe1f0, #ff9ec1 60%, #ff7aa9 100%); border-radius:50%;
+           display:grid; place-items:center; color:white; font-weight:800; letter-spacing:1.2px; box-shadow:0 10px 25px rgba(0,0,0,.25); text-shadow:0 1px 1px rgba(0,0,0,.25)}
+
+    /* open state */
+    #open:checked + label.envelope .flap{ transform: rotateX(-170deg); }
+    #open:checked + label.envelope .letter{ transform: translateY(0); }
+
+    /* Invitation card content */
+    .script{ font-family: "Great Vibes", cursive; color:#cc3b74; font-size: clamp(28px, 5vw, 46px); margin: 4px 0 12px;}
+    .names{ font-family: "Great Vibes", cursive; font-size: clamp(44px, 8vw, 68px); color:#cc3b74; margin:0; line-height:1; }
+    .amp{ color:#e68aa9; padding:0 8px; }
+
+    .details{ margin: 10px auto 10px; font-size:clamp(14px, 2.2vw, 16px); line-height:1.65; color:#2b2b2b }
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; background:#ffe4ef; color:#8e2550; font-weight:600; }
+    .icon{ font-size:18px }
+    .grid{ display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0 }
+    @media(min-width:640px){ .grid{ grid-template-columns:1fr 1fr; } }
+
+    .btns{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px }
+    .btn{
+      appearance:none; border:none; padding:12px 16px; border-radius:12px; background:linear-gradient(90deg,var(--accent),#ff8db8);
+      color:white; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(255,106,162,.35);
+      transition: transform .15s ease, box-shadow .2s ease; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    }
+    .btn:active{ transform:translateY(1px); box-shadow:0 4px 12px rgba(255,106,162,.25); }
+    .btn.outline{ background:transparent; border:2px dashed #ff6aa299; color:#a21d4f }
+
+    .footer-note{ text-align:center; font-size:12px; opacity:.55; margin-top:12px }
+
+    /* confetti canvas above everything */
+    #confetti{ position:fixed; inset:0; pointer-events:none; z-index:10 }
+  </style>
+</head>
+<body>
+  <!-- floating hearts layer -->
+  <div class="hearts" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <h1 class="title">Shhh… It’s a <span style="color:var(--accent-2)">SURPRISE</span>!</h1>
+    <p class="subtitle">Tap the envelope to reveal the invitation 🎉</p>
+
+    <div class="stage">
+      <input id="open" type="checkbox" aria-label="Open invitation" />
+      <label class="envelope" for="open">
+        <div class="env-back"></div>
+        <div class="flap"><div class="seal">💖</div></div>
+        <article class="letter" role="dialog" aria-modal="true" aria-labelledby="names">
+          <div>
+            <div class="script">You are warmly invited to celebrate the wedding cermony </div>
+<h2 id="names" class="names">Aman <span class="amp">&</span> Satya</h2>
+          </div>
+
+          <div class="grid">
+            <div class="details">
+              <div class="pill"><span class="icon">📅</span> <strong>Wednesday, 11 march 2026</strong></div>
+              <div style="margin-top:8px">Cake-cutting at 7:00 PM • Cheers at 7:30 PM</div>
+            </div>
+            <div class="details">
+              <div class="pill"><span class="icon">📍</span> <strong>mohammdabad, ghazipur</strong></div>
+              <div style="margin-top:8px">Near Central Park, C‑Scheme — Rooftop Lounge</div>
+            </div>
+          </div>
+
+          <div class="details" style="text-align:center">
+            Theme: <strong>Pink & Gold Glam</strong> ✨ | Dress Code: <strong>Festive</strong>
+          </div>
+
+          <div class="btns">
+            <a class="btn" href="https://maps.google.com/?q=Rosewood%20Terrace%20Jaipur" target="_blank" rel="noopener">Open in Maps</a>
+            <a class="btn outline" href="tel:+911234567890">RSVP: +91 12345 67890</a>
+            <button class="btn" onclick="window.print()">Print Card</button>
+          </div>
+
+          <p class="footer-note">Psst… Arrive by 6:45 PM and keep it hush‑hush! 🎁</p>
+        </article>
+      </label>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // Floating hearts generator
+    (function hearts(){
+      const layer = document.querySelector('.hearts');
+      const count = 24;
+      for(let i=0;i<count;i++){
+        const s = document.createElement('span');
+        s.style.left = Math.random()*100 + 'vw';
+        s.style.setProperty('--t', (12 + Math.random()*18) + 's');
+        s.style.animationDelay = (Math.random()*-20) + 's';
+        s.style.opacity = 0.2 + Math.random()*0.4;
+        s.style.background = Math.random()>.5 ? 'var(--accent)' : '#ff92b6';
+        s.style.filter = 'blur(' + (Math.random()*1.2) + 'px)';
+        layer.appendChild(s);
+      }
+    })();
+
+    // Confetti on open
+    const checkbox = document.getElementById('open');
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W,H, pieces=[], anim;
+    function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+    addEventListener('resize', resize); resize();
+
+    function makePiece(){
+      const colors = ['#ff6aa2','#ffd166','#7bdcb5','#5ec8ff','#f6a6ff'];
+      return {
+        x: Math.random()*W,
+        y: -20,
+        w: 6+Math.random()*6,
+        h: 10+Math.random()*10,
+        r: Math.random()*360,
+        rv: -6 + Math.random()*12,
+        vy: 2+Math.random()*4,
+        vx: -2+Math.random()*4,
+        c: colors[Math.floor(Math.random()*colors.length)]
+      };
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      pieces.forEach(p=>{
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.r*Math.PI/180);
+        ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+        p.x+=p.vx; p.y+=p.vy; p.r+=p.rv;
+      });
+      pieces = pieces.filter(p=>p.y<H+40);
+      anim = requestAnimationFrame(draw);
+    }
+
+    function burst(duration=3500){
+      cancelAnimationFrame(anim);
+      pieces = Array.from({length: 250}, makePiece);
+      const start = performance.now();
+      draw();
+      const tick = ()=>{
+        if(performance.now()-start < duration){
+          pieces.push(...Array.from({length: 8}, makePiece));
+          requestAnimationFrame(tick);
+        }
+      }; tick();
+      // gentle fadeout
+      setTimeout(()=>{ const fade = setInterval(()=>{ pieces.splice(0,12); if(!pieces.length){ cancelAnimationFrame(anim); clearInterval(fade); ctx.clearRect(0,0,W,H);} }, 40); }, duration);
+    }
+
+    checkbox.addEventListener('change', e=>{ if(e.target.checked){ burst(4200); } });
+
+    // Open automatically if url has #open
+    if(location.hash.includes('open')){
+      checkbox.checked = true; burst(4200);
+    }
+
+    // Personalization helper — edit the lines below to customize quickly
+    // Replace with your details
+    const coupleNames = 'Aman';
+    const dateText = 'Wednesday, 11 March 2026';
+    const venueName = 'Rosewood Terrace, Jaipur';
+    const rsvpNumber = '+91 79059064777';
+
+    // Apply to DOM (optional; already inlined above)
+    // document.getElementById('names').textContent = coupleNames;
+    // document.querySelector('.details .pill strong').textContent = dateText;
+  </script>
+</body>
+</html>
